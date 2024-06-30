@@ -13,7 +13,6 @@ import BatteryFullIcon from '@mui/icons-material/BatteryFull';
 import AccessTimeIcon from '@mui/icons-material/AccessTime';
 import DirectionsIcon from '@mui/icons-material/Directions';
 import StraightenIcon from '@mui/icons-material/Straighten';
-import configData from "./config.json";
 var ago = require('s-ago');
 
 function refreshPage() {
@@ -61,7 +60,7 @@ class App extends Component {
   }
 
   componentDidMount() {
-    fetch(`http://${configData.SERVER_IP}:3890/json`)
+    fetch(`/json`)
       .then(res => res.json())
       .then(json => this.setState({ data: json }));
   }
@@ -76,7 +75,7 @@ class App extends Component {
   boundsOfData() {
     var points = []
     this.state.data.map(point => points.push([point.coords[0], point.coords[1]]))
-    const b = bbox(lineString(points)) 
+    const b = bbox(lineString(points))
     return b === null ? null : [[b[0], b[1]], [b[2], b[3]]]
   }
 
@@ -164,7 +163,7 @@ class App extends Component {
             spiderfyOnMaxZoom={true}
             showCoverageOnHover={false}
             maxClusterRadius={100}>
-              
+
           {this.state.data.map(air => (
             <Marker icon={L.icon({
               iconUrl: /src="([^\"]+)"/.exec(twemoji.parse('⚫️'))[1],
@@ -172,7 +171,7 @@ class App extends Component {
               shadowUrl: /src="([^\"]+)"/.exec(twemoji.parse('⚫️'))[1],
               shadowAnchor: [36, 36]
             })}
-          
+
               position={air.coords}>
               <Popup id={air.sn}>
                 <center>
@@ -191,7 +190,7 @@ class App extends Component {
                 </center>
               </Popup>
               <Tooltip offset={[0, 0]} permanent direction='center' className='emoji-tooltip'>{air.emote}</Tooltip>
-              
+
             </Marker>
           ))}
           </MarkerClusterGroup>
