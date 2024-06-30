@@ -1,0 +1,21 @@
+{
+  "name": "AirtagsAnywhere",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "setup:backend": "(cd back_airtags && npm install);",
+    "setup:frontend": "(cd front_airtags && npm install && npm run build);",
+    "setup": "npm run setup:backend && npm run setup:frontend",
+    "start": "(cd back_airtags && npm start)"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/nicam/AirtagsAnywhere.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/nicam/AirtagsAnywhere/issues"
+  },
+  "homepage": "https://github.com/nicam/AirtagsAnywhere#readme"
+}

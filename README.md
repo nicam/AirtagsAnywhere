@@ -9,12 +9,12 @@ Feel free to open a PR if you have some fixes/improvements.
 
 <details>
   <summary>💻 Click to view desktop interface</summary>
-  
+
   ![Alt Text](/readme_files/desktop.png "Desktop view")
 </details>
 <details>
   <summary>📱 Click to view mobile interface</summary>
-  
+
   ![Alt Text](/readme_files/phone.png "Phone view")
 </details>
 
@@ -32,20 +32,19 @@ The idea of this project is to learn how Airtags location are stored and how to 
 
 ### Getting Started On MacOS (Server)
 
-- Install NodeJS (https://nodejs.dev/download)
+- Install NodeJS using [nvm](https://github.com/nvm-sh/nvm)
 - Clone the repository in a convenient location
-- Replace "`localhost`" with the local ip address of your Mac in `front_airtags/src/config.json`
-(or the external IP address if you want to open it outside of your network) 
-- run `npm install` in both back and front folder
-- run `npm start` in back then front folder
-- open `localhost:3000` on your browser and check if it's working
+- run `nvm use`
+- run `npm setup`
+- run `npm start` (The first time it will ask you for permissions to access `~/Library/Caches/com.apple.findmy.fmipcore/`)
+- open `localhost:3890` on your browser and check if it's working
 
 ### Getting Started On Your Non-Apple Device (Client)
 
-- Type the IP of your Mac on your address bar, followed by :3000, login, and that's it !
+- Type the IP of your Mac on your address bar, followed by :3890, login, and that's it !
 
 
-If you want to access it from the external network, do a wireguard server (or open the port 3000, but I do not recommend it)
+If you want to access it from the external network, do a wireguard server (or open the port 3890, but I do not recommend it)
 
 
 ## ⌨️ Credits
