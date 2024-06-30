@@ -32,7 +32,8 @@
     "start": "HOST=0.0.0.0 react-scripts start",
     "dev": "react-scripts start",
     "server": "live-server public --host=0.0.0.0 --port=3000 --middleware=./disable-browser-cache.js",
-    "build": "react-scripts build",
+    "build": "react-scripts build && npm run mv",
+    "mv": "rm -rf ../back_airtags/public && mv ./build ../back_airtags/public",
     "test": "react-scripts test",
     "eject": "react-scripts eject"
   },

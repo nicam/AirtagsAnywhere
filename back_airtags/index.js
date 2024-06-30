@@ -2,27 +2,35 @@ const express = require('express')
 var haversine = require("haversine-distance");
 const fs = require('fs');
 var cors = require('cors')
+const { askForFullDiskAccess, getAuthStatus } = require('node-mac-permissions')
 const app = express()
 const port = 3890
+const host = '0.0.0.0'
 const HOURS_24_TO_MS = 1000 * 60 * 60 *24;
 const history = {};
+
 /*
 format of history:
 
 "<device>"{"distances":[{"timeStamp":<val>, "dist_m":<val>}...], "lastReport":{<msg>}}, ...
 */
 
+// ask for disk access to be able to access ~/Library
+if (getAuthStatus('full-disk-access') !== 'authorized') {
+    askForFullDiskAccess();
+}
+
 app.use(cors())
 
 function getFindMyData() {
     try {
-        const items_data = fs.readFileSync(process.env.HOME + '/Library/Caches/com.apple.findmy.fmipcore/Items.data', 'utf8');
+       const items_data = fs.readFileSync(process.env.HOME + '/Library/Caches/com.apple.findmy.fmipcore/Items.data', 'utf8');
         let parsed_data = JSON.parse(items_data);
         let items_filtered_data = parsed_data
             .filter(item => item.productType && item.productType.type === "b389" &&
             item.batteryStatus && item.address && item.address.formattedAddressLines &&
-            item.location && item.location.latitude && 
-            item.location.longitude && item.location.timeStamp && item.role && item.role.emoji && 
+            item.location && item.location.latitude &&
+            item.location.longitude && item.location.timeStamp && item.role && item.role.emoji &&
             item.serialNumber)
             .map(item => {
                 return {
@@ -47,8 +55,8 @@ function getFindMyData() {
         parsed_data = JSON.parse(devices_data)
         let devices_filtered_data = parsed_data
         .filter(device => device.deviceModel && device.name && device.batteryLevel
-            && device.address && device.address.formattedAddressLines && device.location && 
-            device.location.latitude && device.location.longitude && device.location.timeStamp && 
+            && device.address && device.address.formattedAddressLines && device.location &&
+            device.location.latitude && device.location.longitude && device.location.timeStamp &&
             device.baUUID && (typeof device.isMac !== "undefined"))
         .map(device => {
             return {
@@ -107,7 +115,7 @@ function distanceSinceLastReport(deviceSN, pointNow, pointTimeStamp){
             // Only add new distances if the timestamp is diffferent on file.
             history[deviceSN].distances.push({timeStamp:lastReport.timeStamp, dist_m:distance})
         }
-        
+
     }
     return distance
 
@@ -117,11 +125,11 @@ function distance24Hours(deviceSN){
     var distance = 0;
     if (deviceSN in history) {
         timeNow = Date.now()
-        
+
         var distances24hrs = history[deviceSN].distances.filter(
             dist => (timeNow - dist.timeStamp) < HOURS_24_TO_MS
         )
-        
+
         history[deviceSN].distances = distances24hrs;
 
         distances24hrs.map(dist => distance+=dist.dist_m)
@@ -131,12 +139,14 @@ function distance24Hours(deviceSN){
     return distance;
 }
 
+app.use(express.static('public'))
+
 app.get('/json', (req, res) => {
     res.json(getFindMyData())
 })
 
-app.listen(port, () => {
+app.listen(port, host, () => {
     console.log(`App listening on port ${port}`)
 })
 
-setInterval(getFindMyData, 1000 * 60 * 15);
+setInterval(getFindMyData, 1000 * 60 * 1);
