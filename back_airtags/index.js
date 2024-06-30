@@ -146,7 +146,7 @@ app.get('/json', (req, res) => {
 })
 
 app.listen(port, host, () => {
-    console.log(`App listening on port ${port}`)
+    console.log(`App listening on host ${host} port ${port}`)
 })
 
 setInterval(getFindMyData, 1000 * 60 * 1);
