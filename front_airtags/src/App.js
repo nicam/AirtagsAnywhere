@@ -19,6 +19,14 @@ function refreshPage() {
   window.location.reload(false);
 }
 
+const parse = (param) => {
+  //workaround because maxcdn doesn't have it anymore
+  return twemoji.parse(param).replace(
+    'twemoji.maxcdn.com/v',
+    'cdnjs.cloudflare.com/ajax/libs/twemoji',
+  );
+};
+
 class App extends Component {
   constructor(props) {
     super(props);
@@ -155,9 +163,9 @@ class App extends Component {
 
           <MarkerClusterGroup
             iconCreateFunction={() => L.icon({
-              iconUrl: /src="([^\"]+)"/.exec(twemoji.parse('⚪️'))[1],
+              iconUrl: /src="([^\"]+)"/.exec(parse('⚪️'))[1],
               iconSize: 50,
-              shadowUrl: /src="([^\"]+)"/.exec(twemoji.parse('⚫️'))[1],
+              shadowUrl: /src="([^\"]+)"/.exec(parse('⚫️'))[1],
               shadowAnchor: [36, 36]
             })}
             spiderfyOnMaxZoom={true}
@@ -166,9 +174,9 @@ class App extends Component {
 
           {this.state.data.map(air => (
             <Marker icon={L.icon({
-              iconUrl: /src="([^\"]+)"/.exec(twemoji.parse('⚫️'))[1],
+              iconUrl: /src="([^\"]+)"/.exec(parse('⚫️'))[1],
               iconSize: 50,
-              shadowUrl: /src="([^\"]+)"/.exec(twemoji.parse('⚫️'))[1],
+              shadowUrl: /src="([^\"]+)"/.exec(parse('⚫️'))[1],
               shadowAnchor: [36, 36]
             })}
 
